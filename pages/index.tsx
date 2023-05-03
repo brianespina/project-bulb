@@ -3,13 +3,8 @@ import { Inter } from 'next/font/google'
 import { GetStaticProps, InferGetStaticPropsType, GetStaticPropsResult } from 'next'
 import { db } from '../firebase/firebase'
 import { doc, getDoc } from "firebase/firestore";
-import { type } from 'os';
 
 const inter = Inter({ subsets: ['latin'] })
-
-interface HomeProps {
-  title: string
-}
 
 interface Boxes {
   title: string

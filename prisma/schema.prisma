@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String     @default(cuid()) @id
+  fname     String
+  lname     String
+  email     String      @unique
+  products  Product[]
+  reviews   Review[]
+  transactions      Transaction[]
+}
+
+model Product {
+  id        String     @default(cuid()) @id
+  name      String
+  desc      String
+  price     Float   Decimal?  @mysql.Decimal(10, 2)
+  condition String
+  vendor    User
+  status    String
+  buyer     User?
+  transaction   Transaction?
+}
+
+model Review {
+  id        String     @default(cuid()) @id
+  authour   User
+  title     String
+  content   String
+}
+
+model Transaction {
+  id        String     @default(cuid()) @id
+  product   Product
+  vendor    User
+  buyer     User
+  status    String
+}
+

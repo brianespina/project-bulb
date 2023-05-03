@@ -11,39 +11,40 @@ generator client {
 }
 
 model User {
-  id        String     @default(cuid()) @id
-  fname     String
-  lname     String
-  email     String      @unique
-  products  Product[]
-  reviews   Review[]
-  transactions      Transaction[]
+  id            String    @id @default(cuid())
+  fname         String
+  lname         String
+  email         String    @unique
+  bought        Product[] @relation("ProductsSoldTo")
+  sold          Product[] @relation("ProductsSoldBy")
+  postedReviews Review[]
 }
 
 model Product {
-  id        String     @default(cuid()) @id
-  name      String
-  desc      String
-  price     Float   Decimal?  @mysql.Decimal(10, 2)
-  condition String
-  vendor    User
-  status    String
-  buyer     User?
-  transaction   Transaction?
-}
-
-model Review {
-  id        String     @default(cuid()) @id
-  authour   User
-  title     String
-  content   String
+  id          String       @id @default(cuid())
+  name        String
+  desc        String
+  price       Int
+  condition   String
+  soldBy      User         @relation("ProductsSoldBy", fields: [soldById], references: [id])
+  soldById    String
+  soldTo      User?        @relation("ProductsSoldTo", fields: [soldToId], references: [id])
+  soldToId    String?
+  Transaction Transaction?
+  Review      Review[]
 }
 
 model Transaction {
-  id        String     @default(cuid()) @id
-  product   Product
-  vendor    User
-  buyer     User
+  id        String  @id @default(cuid())
   status    String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @unique
 }
 
+model Review {
+  id        String  @id @default(cuid())
+  author    User    @relation(fields: [authorId], references: [id])
+  authorId  String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+}

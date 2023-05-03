@@ -14,6 +14,8 @@ model User {
   id            String    @id @default(cuid())
   fname         String
   lname         String
+  dateCreated   DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   email         String    @unique
   bought        Product[] @relation("ProductsSoldTo")
   sold          Product[] @relation("ProductsSoldBy")
@@ -32,19 +34,23 @@ model Product {
   soldToId    String?
   Transaction Transaction?
   Review      Review[]
+  dateCreated DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 model Transaction {
-  id        String  @id @default(cuid())
-  status    String
-  product   Product @relation(fields: [productId], references: [id])
-  productId String  @unique
+  id          String   @id @default(cuid())
+  status      String
+  product     Product  @relation(fields: [productId], references: [id])
+  productId   String   @unique
+  dateCreated DateTime @default(now())
 }
 
 model Review {
-  id        String  @id @default(cuid())
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  String
-  product   Product @relation(fields: [productId], references: [id])
-  productId String
+  id          String   @id @default(cuid())
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    String
+  product     Product  @relation(fields: [productId], references: [id])
+  productId   String
+  dateCreated DateTime @default(now())
 }
